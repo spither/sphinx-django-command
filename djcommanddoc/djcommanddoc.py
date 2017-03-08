@@ -1,6 +1,7 @@
 from importlib import import_module
 from docutils import nodes
 from docutils.parsers.rst import Directive
+from pylatex.utils import escape_latex
 
 
 class djcommand(nodes.Element):
@@ -27,7 +28,7 @@ def visit_djcommand_node_latex(self, node):
     command_name = node.rawsource.split('.')[-1]
     command_module = import_module(node.rawsource)
     parser = command_module.Command().create_parser('manage.py', command_name)
-    self.body.append(parser.format_help())
+    self.body.append(escape_latex(parser.format_help()))
 
 
 def depart_djcommand_node_latex(self, node):
